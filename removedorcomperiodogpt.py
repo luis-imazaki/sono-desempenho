@@ -53,7 +53,7 @@ df_sem_duplicatas['Período'] = df_sem_duplicatas['Horário Início'].apply(clas
 
 # Manter as colunas relevantes e descartar 'Horário Início' e 'Horário Fim'
 df_resultante = df_sem_duplicatas[['Curso', 'Ano/Semestre Ingresso', 'RGA', 'Nome Aluno', 'Sexo', 'Data Nascimento', 
-                                   'Ano/Semestre Disciplina', 'Disciplina', 'Dia da Semana', 
+                                   'Ano/Semestre Disciplina', 'Disciplina', 
                                    'Período', 'Média Final', '% Frequência', 'Situação Final']]
 
 # Salvar o resultado em um novo arquivo CSV
