@@ -9,7 +9,9 @@ csv_path_out = Path(__file__).parent / 'resultados' / 'resultados.csv'
 
 # Conjunto para rastrear valores únicos de row[2]
 valores_unicos = set()
-
+cargas = {}
+pesos = {}
+horarios1 = ["07:15:00","07:00:00","05:00:00","06:00:00"]
 # Abrindo o arquivo de entrada para leitura
 with csv_path.open('r', encoding='utf-8') as file_in:
     reader = csv.reader(file_in)
@@ -27,17 +29,42 @@ with csv_path.open('r', encoding='utf-8') as file_in:
                 combinacao = (row_in[6], row_in[7], row_in[0], row_in[1], row_in[2])
                 
                 # Saida com os dados relevantes 
-                saida = row_in[0:3] + row_in[6:13] 
+                 
 
                 # Se row não existir no arquivo de saída, escreve o novo
                 if combinacao not in valores_unicos:
-                    
+                    carga = 1
+                    if row_in[9] in horarios1:
+                        cargas[combinacao] = 1
+                    if row_in[9] in horarios2: #precisa ver como serão feitas as
+                        cargas[combinacao] = 2 #distribuicoes de carga
+                    if row_in[9] in horarios3:
+                        cargas[combinacao] = 3
+                    if row_in[9] in horarios4:
+                        cargas[combinacao] = 4
+                    if row_in[9] in horarios5:
+                        cargas[combinacao] = 5
+                    if row_in[9] in horarios6:
+                        cargas[combinacao] = 6
+                    saida = row_in[0:3] + row_in[6:13] + carga
                     writer.writerow(saida)
                     
                     valores_unicos.add(combinacao)
                 # Se existir, só pega o horário da disciplina e o nome dela
                 else:
-                    writer.writerow(row_in[7:11])
+                    if row_in[9] in horarios1:
+                        cargas[combinacao] += 1
+                    if row_in[9] in horarios2: #precisa ver como serão feitas as
+                        cargas[combinacao] += 2 #distribuicoes de carga
+                    if row_in[9] in horarios3:
+                        cargas[combinacao] += 3
+                    if row_in[9] in horarios4:
+                        cargas[combinacao] += 4
+                    if row_in[9] in horarios5:
+                        cargas[combinacao] += 5
+                    if row_in[9] in horarios6:
+                        cargas[combinacao] += 6
+                    writer.writerow(row_in[7:11] + carga)
 
 # Removendo linhas duplicadas dos horários        
 
