@@ -12,6 +12,11 @@ valores_unicos = set()
 cargas = {}
 pesos = {}
 horarios1 = ["07:15:00","07:00:00","05:00:00","06:00:00"]
+horarios2 = []
+horarios3 = []
+horarios4 = []
+horarios5 = []
+horarios6 = []
 # Abrindo o arquivo de entrada para leitura
 with csv_path.open('r', encoding='utf-8') as file_in:
     reader = csv.reader(file_in)
@@ -34,37 +39,40 @@ with csv_path.open('r', encoding='utf-8') as file_in:
                 # Se row não existir no arquivo de saída, escreve o novo
                 if combinacao not in valores_unicos:
                     carga = 1
+                    cargas[combinacao] = carga
                     if row_in[9] in horarios1:
-                        cargas[combinacao] = 1
+                        pesos[combinacao] = 1
                     if row_in[9] in horarios2: #precisa ver como serão feitas as
-                        cargas[combinacao] = 2 #distribuicoes de carga
+                        pesos[combinacao] = 2 #distribuicoes de carga
                     if row_in[9] in horarios3:
-                        cargas[combinacao] = 3
+                        pesos[combinacao] = 3
                     if row_in[9] in horarios4:
-                        cargas[combinacao] = 4
+                        pesos[combinacao] = 4
                     if row_in[9] in horarios5:
-                        cargas[combinacao] = 5
+                        pesos[combinacao] = 5
                     if row_in[9] in horarios6:
-                        cargas[combinacao] = 6
+                        pesos[combinacao] = 6
                     saida = row_in[0:3] + row_in[6:13] + carga
                     writer.writerow(saida)
                     
                     valores_unicos.add(combinacao)
                 # Se existir, só pega o horário da disciplina e o nome dela
                 else:
+                    cargas[combinacao] +=1
                     if row_in[9] in horarios1:
-                        cargas[combinacao] += 1
+                        pesos[combinacao] += 1
                     if row_in[9] in horarios2: #precisa ver como serão feitas as
-                        cargas[combinacao] += 2 #distribuicoes de carga
+                        pesos[combinacao] += 2 #distribuicoes de carga
                     if row_in[9] in horarios3:
-                        cargas[combinacao] += 3
+                        pesos[combinacao] += 3
                     if row_in[9] in horarios4:
-                        cargas[combinacao] += 4
+                        pesos[combinacao] += 4
                     if row_in[9] in horarios5:
-                        cargas[combinacao] += 5
+                        pesos[combinacao] += 5
                     if row_in[9] in horarios6:
-                        cargas[combinacao] += 6
-                    writer.writerow(row_in[7:11] + carga)
+                        pesos[combinacao] += 6
+                    peso_calculado = pesos[combinacao] / carga[combinacao]
+                    writer.writerow(row_in[7:11] + carga + peso_calculado)
 
 # Removendo linhas duplicadas dos horários        
 
