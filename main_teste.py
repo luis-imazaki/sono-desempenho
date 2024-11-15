@@ -37,11 +37,14 @@ with csv_path.open('r', encoding='utf-8') as file_in:
                  
 
                 # Se row não existir no arquivo de saída, escreve o novo
-                if combinacao not in valores_unicos:
-                    carga = 1
+                if combinacao not in valores_unicos and row_in[9] >= horarios1[0] and row_in[10] <= horarios6[1]: # o horario inicio deve ser >= que o nosso primeiro horario 
+                    carga = 1                                                                                     # e o fim deve ser <= que o nosso ultimo horario
                     cargas[combinacao] = carga
                     if row_in[9] in horarios1:
-                        pesos[combinacao] = 1
+                        if row_in[10] <= horarios2[0]:
+                            pesos[combinacao] = 1
+                        else:
+                            pesos[combinacao] = 1,5
                     if row_in[9] in horarios2: #precisa ver como serão feitas as
                         pesos[combinacao] = 2 #distribuicoes de carga
                     if row_in[9] in horarios3:
@@ -52,6 +55,13 @@ with csv_path.open('r', encoding='utf-8') as file_in:
                         pesos[combinacao] = 5
                     if row_in[9] in horarios6:
                         pesos[combinacao] = 6
+                    else:
+                        if row_in[10] in horarios1:
+                            
+                            
+                            
+                        else:
+
                     saida = row_in[0:3] + row_in[6:13] + carga
                     writer.writerow(saida)
                     
