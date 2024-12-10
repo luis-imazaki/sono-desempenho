@@ -39,94 +39,96 @@ with csv_path.open('r', encoding='utf-8') as file_in:
         for row_in in reader:
            cont += 1
            # Verifica o semestre do ano e o curso
-           if row_in[6] == "2010/1" and row_in[0] == 'ANÁLISE DE SISTEMAS - BACHARELADO':
-                
-                # Combina os valores que não podem se repetir  (RGA, Ano/Semestre, disciplina, curso) 
-                combinacao = (row_in[6], row_in[7], row_in[0], row_in[1], row_in[2])
-                
-                # Saida com os dados relevantes 
-                 
-                time1 = datetime.strptime(row_in[9], formato).time() #converte o horario_inicio para datetime
-                time2 = datetime.strptime(row_in[10], formato).time() #converte o horario_fim para datetime
-                time3 = datetime.strptime(horario1[0], formato).time() #converte o primeiro horario para datetime
-                time4 = datetime.strptime(horario6[1], formato).time() #converte o ultimo horario para datetime
-                # Se row não existir no arquivo de saída, escreve o novo
-                if combinacao not in valores_unicos and time1 >= time3 and time2 <= time4: # o horario inicio deve ser >= que o nosso primeiro horario 
-                    carga = 1                                                                                     # e o fim deve ser <= que o nosso ultimo horario
-                    cargas[combinacao] = carga
-                    if horario_no_intervalo(row_in[9],horario1[0],horario1[1]):
-                        time_aux = datetime.strptime(horario2[0], formato).time()
-                        if time1 <= time_aux:
-                            pesos[combinacao] = 1
-                        else:
-                            pesos[combinacao] = 1.5
-                    if horario_no_intervalo(row_in[9],horario2[0],horario2[1]): 
-                        time_aux = datetime.strptime(horario3[0], formato).time()
-                        if time1 <= time_aux:
-                            pesos[combinacao] = 2 
-                        else:
-                            pesos[combinacao] = 2.5 
-                    if horario_no_intervalo(row_in[9],horario3[0],horario3[1]): 
-                        time_aux = datetime.strptime(horario4[0], formato).time()
-                        if time1 <= time_aux:
-                            pesos[combinacao] = 3 
-                        else:
-                            pesos[combinacao] = 3.5 
-                    if horario_no_intervalo(row_in[9],horario4[0],horario4[1]): 
-                        time_aux = datetime.strptime(horario5[0], formato).time()
-                        if time1 <= time_aux:
-                            pesos[combinacao] = 4 
-                        else:
-                            pesos[combinacao] = 4.5 
-                    if horario_no_intervalo(row_in[9],horario5[0],horario5[1]): 
-                        time_aux = datetime.strptime(horario6[0], formato).time()
-                        if time1 <= time_aux:
-                            pesos[combinacao] = 5 
-                        else:
-                            pesos[combinacao] = 5.5 
-                    if horario_no_intervalo(row_in[9],horario6[0],horario6[1]): 
-                        pesos[combinacao] = 6
+           if row_in[8] != "EAD":
+                if row_in[6] == "2023/2" and row_in[0] == 'Ciência da Computação':
+                    
+                    # Combina os valores que não podem se repetir  (RGA, Ano/Semestre, disciplina, curso) 
+                    combinacao = (row_in[6], row_in[7], row_in[0], row_in[1], row_in[2])
+                    
+                    # Saida com os dados relevantes 
+                    
+                    time1 = datetime.strptime(row_in[9], formato).time() #converte o horario_inicio para datetime
+                    time2 = datetime.strptime(row_in[10], formato).time() #converte o horario_fim para datetime
+                    time3 = datetime.strptime(horario1[0], formato).time() #converte o primeiro horario para datetime
+                    time4 = datetime.strptime(horario6[1], formato).time() #converte o ultimo horario para datetime
+                    # Se row não existir no arquivo de saída, escreve o novo
+                    
+                    if combinacao not in valores_unicos and time1 >= time3 and time2 <= time4: # o horario inicio deve ser >= que o nosso primeiro horario 
+                        carga = 1                                                                                     # e o fim deve ser <= que o nosso ultimo horario
+                        cargas[combinacao] = carga
+                        if horario_no_intervalo(row_in[9],horario1[0],horario1[1]):
+                            time_aux = datetime.strptime(horario2[0], formato).time()
+                            if time1 <= time_aux:
+                                pesos[combinacao] = 1
+                            else:
+                                pesos[combinacao] = 1.5
+                        if horario_no_intervalo(row_in[9],horario2[0],horario2[1]): 
+                            time_aux = datetime.strptime(horario3[0], formato).time()
+                            if time1 <= time_aux:
+                                pesos[combinacao] = 2 
+                            else:
+                                pesos[combinacao] = 2.5 
+                        if horario_no_intervalo(row_in[9],horario3[0],horario3[1]): 
+                            time_aux = datetime.strptime(horario4[0], formato).time()
+                            if time1 <= time_aux:
+                                pesos[combinacao] = 3 
+                            else:
+                                pesos[combinacao] = 3.5 
+                        if horario_no_intervalo(row_in[9],horario4[0],horario4[1]): 
+                            time_aux = datetime.strptime(horario5[0], formato).time()
+                            if time1 <= time_aux:
+                                pesos[combinacao] = 4 
+                            else:
+                                pesos[combinacao] = 4.5 
+                        if horario_no_intervalo(row_in[9],horario5[0],horario5[1]): 
+                            time_aux = datetime.strptime(horario6[0], formato).time()
+                            if time1 <= time_aux:
+                                pesos[combinacao] = 5 
+                            else:
+                                pesos[combinacao] = 5.5 
+                        if horario_no_intervalo(row_in[9],horario6[0],horario6[1]): 
+                            pesos[combinacao] = 6
 
-                    saida = row_in[0:3] + row_in[6:13] + [cargas[combinacao], pesos[combinacao]]
-                    writer.writerow(saida)
-                    valores_unicos.add(combinacao)
-                # Se existir, só pega o horário da disciplina e o nome dela
-                else:
-                    cargas[combinacao] = cargas[combinacao] + 1
-                    if horario_no_intervalo(row_in[9],horario1[0],horario1[1]):
-                        time_aux = datetime.strptime(horario2[0], formato).time()
-                        if time1 <= time_aux:
-                            pesos[combinacao] += 1
-                        else:
-                            pesos[combinacao] += 1.5
-                    if horario_no_intervalo(row_in[9],horario2[0],horario2[1]): 
-                        time_aux = datetime.strptime(horario3[0], formato).time()
-                        if time1 <= time_aux:
-                            pesos[combinacao] += 2 
-                        else:
-                            pesos[combinacao] += 2.5 
-                    if horario_no_intervalo(row_in[9],horario3[0],horario3[1]): 
-                        time_aux = datetime.strptime(horario4[0], formato).time()
-                        if time1 <= time_aux:
-                            pesos[combinacao] += 3 
-                        else:
-                            pesos[combinacao] += 3.5 
-                    if horario_no_intervalo(row_in[9],horario4[0],horario4[1]): 
-                        time_aux = datetime.strptime(horario5[0], formato).time()
-                        if time1 <= time_aux:
-                            pesos[combinacao] += 4 
-                        else:
-                            pesos[combinacao] += 4.5 
-                    if horario_no_intervalo(row_in[9],horario5[0],horario5[1]): 
-                        time_aux = datetime.strptime(horario6[0], formato).time()
-                        if time1 <= time_aux:
-                            pesos[combinacao] += 5 
-                        else:
-                            pesos[combinacao] += 5.5 
-                    if horario_no_intervalo(row_in[9],horario6[0],horario6[1]): 
-                        pesos[combinacao] += 6
-                    saida = row_in[0:3] + row_in[6:13] + [cargas[combinacao], pesos[combinacao]]
-                    writer.writerow(saida)
+                        saida = row_in[0:3] + row_in[6:13] + [cargas[combinacao], pesos[combinacao]]
+                        writer.writerow(saida)
+                        valores_unicos.add(combinacao)
+                    # Se existir, só pega o horário da disciplina e o nome dela
+                    else:
+                        cargas[combinacao] = cargas[combinacao] + 1
+                        if horario_no_intervalo(row_in[9],horario1[0],horario1[1]):
+                            time_aux = datetime.strptime(horario2[0], formato).time()
+                            if time1 <= time_aux:
+                                pesos[combinacao] += 1
+                            else:
+                                pesos[combinacao] += 1.5
+                        if horario_no_intervalo(row_in[9],horario2[0],horario2[1]): 
+                            time_aux = datetime.strptime(horario3[0], formato).time()
+                            if time1 <= time_aux:
+                                pesos[combinacao] += 2 
+                            else:
+                                pesos[combinacao] += 2.5 
+                        if horario_no_intervalo(row_in[9],horario3[0],horario3[1]): 
+                            time_aux = datetime.strptime(horario4[0], formato).time()
+                            if time1 <= time_aux:
+                                pesos[combinacao] += 3 
+                            else:
+                                pesos[combinacao] += 3.5 
+                        if horario_no_intervalo(row_in[9],horario4[0],horario4[1]): 
+                            time_aux = datetime.strptime(horario5[0], formato).time()
+                            if time1 <= time_aux:
+                                pesos[combinacao] += 4 
+                            else:
+                                pesos[combinacao] += 4.5 
+                        if horario_no_intervalo(row_in[9],horario5[0],horario5[1]): 
+                            time_aux = datetime.strptime(horario6[0], formato).time()
+                            if time1 <= time_aux:
+                                pesos[combinacao] += 5 
+                            else:
+                                pesos[combinacao] += 5.5 
+                        if horario_no_intervalo(row_in[9],horario6[0],horario6[1]): 
+                            pesos[combinacao] += 6
+                        saida = row_in[0:3] + row_in[6:13] + [cargas[combinacao], pesos[combinacao]]
+                        writer.writerow(saida)
 
 # Removendo linhas duplicadas dos horários        
 
